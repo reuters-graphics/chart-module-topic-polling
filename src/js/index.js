@@ -55,7 +55,7 @@ class TopicPolling {
       const aVal = data.demographics['Respondents:AllRespondents'][a][dateIndex];
       const bVal = data.demographics['Respondents:AllRespondents'][b][dateIndex];
 
-      return aVal - bVal;
+      return bVal - aVal;
     });
 
     this.demoList = ['All'];
@@ -70,26 +70,38 @@ class TopicPolling {
 
     const theMap = {};
     const theData = [];
-
+    // const termLookup = this.demoList;
+    // const temp = [];
     console.log(data.demographics);
 
-    this.termList.forEach(term => {
-      if (!theMap[term]) {
-        theMap[term] = {};
+    this.demoList.forEach(demo => {
+      if (demo === 'All') {
+        return true;
       }
 
-      this.demoList.forEach(demo => {
-        if (demo == 'All') {
-          return true;
-        }
+      if (!theMap[demo]) {
+        theMap[demo] = [];
+      }
 
-        theMap[term][demo] = data.demographics[`${props.selectedDemo}:${demo}`][term][dateIndex];
+      this.termList.forEach(term => {
+        const obj = {
+          val: data.demographics[`${props.selectedDemo}:${demo}`][term][dateIndex],
+          term: term,
+        };
+
+        theMap[demo].push(obj);
       });
     });
 
-    console.log(theMap);
+    Object.keys(theMap).forEach(demo => {
+      theMap[demo] = theMap[demo].sort((a, b) => {
+        const aVal = a.val;
+        const bVal = b.val;
+        return bVal - aVal;
+      });
+    });
 
-    this.termList.forEach(term => {
+    this.termList.forEach((term, i) => {
       const obj = {
         id: term,
         values: [],
@@ -99,6 +111,7 @@ class TopicPolling {
         id: 'All',
         term: term,
         val: this.allTerms[term][dateIndex],
+        rank: i,
       };
 
       obj.values.push(AllObj);
@@ -109,16 +122,31 @@ class TopicPolling {
             id: demo,
             term: term,
             val: data.demographics[`${props.selectedDemo}:${demo}`][term][dateIndex],
+            rank: theMap[demo].findIndex(d => d.term == term),
           };
 
           obj.values.push(valObj);
         }
       });
 
+      // const high = this.allTerms[term][dateIndex];
+      // const low = this.allTerms[term][dateIndex][this.allTerms[term][dateIndex].length - 1];
+      // const mid = (high - low) / 2;
+
+      // this.colorDom = [low, mid, high];
       theData.push(obj);
     });
-    // console.log('thedata', theData);
 
+    theData.forEach((data, i) => {
+      console.log('datadata', theData[theData.length - 1]);
+      const high = theData[0].values[0].val;
+      const low = theData[theData.length - 1].values[0].val;
+      const mid = (high - low) / 2;
+
+      this.colorDom = [low, mid, high];
+    });
+    console.log('thedata', theData);
+    console.log('AHAHAHAHA', this.colorDom);
     return theData.sort((a, b) =>
       d3.descending(a.values[0].val, b.values[0].val)
     );
@@ -160,21 +188,37 @@ class TopicPolling {
     const width = containerWidth - margin.left - margin.right;
     const height = (this.termList.length * 30) - margin.top - margin.bottom;
 
+    const yDom = d3.range(0, this.termList.length);
+
     const xScale = d3.scaleBand()
       .domain(this.demoList)
-      .range([0, width]);
+      .range([0, width])
+      .padding(0.4);
 
     const yScale = d3.scaleBand()
-      .domain(this.termList)
-      .range([height, 0]);
+      .domain(yDom)
+      .range([0, height])
+      .padding(0.1);
 
     const valueScale = d3.scaleLinear()
       .domain([0, 20])
       .range(['red', 'red']);
 
-    const makeLine = d3.line()
-      .x(d => xScale(d.id))
-      .y(d => yScale(d.term));
+    this.color = d3.scaleLinear()
+      .domain(this.colorDom)
+      .range(['lightyellow', '#fd7e14', '#dc3545']);
+
+    const xbw = xScale.bandwidth();
+    const ybw = yScale.bandwidth();
+
+    console.log(xbw, ybw);
+
+    const makeLine = d3.area()
+      .x(d => {
+        return xScale(d.id) + (xbw * d.dir) + (xbw * 0.5);
+      })
+      .y0(d => yScale(d.rank))
+      .y1(d => yScale(d.rank) + ybw);
 
     // .attr('x', d => xScale(d.id) - margin.left / this.demoList.length + 1)
     // .attr('y', d => yScale(d.term) - margin.top / 2)
@@ -192,9 +236,15 @@ class TopicPolling {
       .call(d3.axisTop(xScale))
       .selectAll('.tick text');
 
+    const tickValue = plotData.map(d => d.id);
+
+    console.log(tickValue);
+    console.log('DATA HERE', plotData);
     plot
       .appendSelect('g.axis.y')
-      .call(d3.axisLeft(yScale))
+      .call(d3.axisLeft(yScale).tickFormat(d => {
+        return tickValue[d];
+      }))
       .selectAll('.tick text')
       .attr('x', -props.margin.left)
       .style('text-anchor', 'start');
@@ -225,18 +275,33 @@ class TopicPolling {
       .join('text')
       .attr('class', 'val')
       .attr('x', d => xScale(d.id) + (xScale.bandwidth() * 0.5))
-      .attr('y', d => yScale(d.term) + (yScale.bandwidth() * 0.5) + 6)
+      .attr('y', d => yScale(d.rank) + (yScale.bandwidth() * 0.5) + 6)
       .text(d => d3.format('.1f')(d.val))
       .style('text-anchor', 'middle');
 
-    // termGroup.appendSelect('path')
-    //   .each(d => {
-    //     console.log(d);
-    //   })
-    //   .attr('d', d => makeLine(d.values))
-    //   .style('fill', 'none')
-    //   .style('stroke', 'magenta')
-    //   .style('stoke-width', '30px');
+    termGroup.appendSelect('path')
+      .attr('d', d => {
+        const newArr = [];
+        d.values.forEach(v => {
+          [-0.5, 0.5].forEach(dir => {
+            const obj = {
+              rank: v.rank,
+              term: v.term,
+              val: v.val,
+              id: v.id,
+              dir: dir,
+            };
+
+            newArr.push(obj);
+          });
+        });
+
+        return makeLine(newArr);
+      })
+      .style('fill', d => {
+        return this.color(d.values[0].val);
+      })
+      .style('opacity', 0.5);
 
     const transition = plot.transition().duration(500);
 
