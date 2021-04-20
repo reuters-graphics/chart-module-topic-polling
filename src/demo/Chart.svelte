@@ -28,7 +28,46 @@ Follow the notes below! -->
   $: chartProps = {
     dates: testData.dates,
     selectedDate: defaultDateKey,
-    selectedDemo: 'Party'
+    selectedDemo: 'Party',
+    omit:["NoneDK","DK","Prefernottoanswer","Other","NoAnswer"],
+    demographicLookup:{
+      Respondents:{},
+      RegisterdVoter:{},
+      Party:{
+      All: 'All',
+      Republican: 'Rep.',
+      Democrat: 'Dem.',
+      Independent: 'Ind.'
+      },
+      Age: {
+      },
+      Gender:{},
+      Residence:{},
+      Education:{},
+      Race:{
+
+      },
+      Income:{},
+      MaritalStatus:{},
+      Employment:{},
+      HomeOwnership:{}
+    },
+    translation:{
+      en:{
+      'Economy, unemployment, and jobs': 'Economy',
+      'Public health, disease, and illness': 'Public health',
+      'Health care system': 'Health care',
+      Immigration: 'Immigration',
+      'Crime or corruption': 'Crime',
+      'Inequality and discrimination': 'Inequality',
+      Morality: 'Morality',
+      Education: 'Education',
+      'Environment and climate': 'Environment',
+      'Terrorism and extremism': 'Terrorism',
+      'War and foreign conflicts': 'War/conflict',
+      'Energy issues': 'Energy issues',
+      }
+    }
   };
 
 

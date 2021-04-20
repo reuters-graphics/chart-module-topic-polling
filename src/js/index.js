@@ -30,23 +30,11 @@ class TopicPolling {
   }
 
   formatData(data, props) {
-    // {
-    //   id: 'Economy',
-    //   values: [
-    //     {
-    //       id: 'All', //xSclale variable
-    //       val: 17.8, //display variable
-    //       rank: 1 //yScale variable
-    //     }
-
-    //   ]
-    // }
-
     this.allTerms = data.demographics['Respondents:AllRespondents'];
     const dateIndex = data.dates.indexOf(props.selectedDate);
 
     this.termList = Object.keys(this.allTerms).filter(term => {
-      if (term !== 'Total - Unweighted Count') {
+      if (term !== 'Total - Unweighted Count' && term !== 'Other' && term !== "Don't know") {
         return this.allTerms[term][dateIndex];
       }
     });
@@ -61,12 +49,16 @@ class TopicPolling {
     this.demoList = ['All'];
     Object.keys(data.demographics).forEach(key => {
       if (key.split(':')[0] === props.selectedDemo) {
+        const lookupObject = key.split(':')[0];
         const demo = key.split(':')[1];
-        this.demoList.push(demo);
+        console.log('demoList', data.demographics, 'key', key);
+        if (props.omit.indexOf(demo) < 0) {
+          this.demoList.push(demo);
+        }
       }
     });
 
-    // console.log('demolist', this.demoList);
+    console.log('props', props.translation.en);
 
     const theMap = {};
     const theData = [];
@@ -129,24 +121,22 @@ class TopicPolling {
         }
       });
 
-      // const high = this.allTerms[term][dateIndex];
-      // const low = this.allTerms[term][dateIndex][this.allTerms[term][dateIndex].length - 1];
-      // const mid = (high - low) / 2;
-
-      // this.colorDom = [low, mid, high];
       theData.push(obj);
     });
 
+    let high, low, mid;
     theData.forEach((data, i) => {
-      console.log('datadata', theData[theData.length - 1]);
-      const high = theData[0].values[0].val;
-      const low = theData[theData.length - 1].values[0].val;
-      const mid = (high - low) / 2;
+      console.log('color dom data', theData[i].values[0].val);
+      high = theData[0].values[0].val;
+      // if (theData[i].values[0].val > 5.0) {
+      //   low = theData[i].values[0].val;
+      // }
+      low = theData[theData.length - 1].values[0].val;
+      mid = (high - low) / 2;
 
       this.colorDom = [low, mid, high];
     });
-    console.log('thedata', theData);
-    console.log('AHAHAHAHA', this.colorDom);
+
     return theData.sort((a, b) =>
       d3.descending(a.values[0].val, b.values[0].val)
     );
@@ -164,7 +154,7 @@ class TopicPolling {
       top: 40,
       right: 20,
       bottom: 25,
-      left: 200,
+      left: 70,
     },
     fill: 'grey',
   };
@@ -208,6 +198,10 @@ class TopicPolling {
       .domain(this.colorDom)
       .range(['lightyellow', '#fd7e14', '#dc3545']);
 
+    this.colorOther = d3.scaleLinear()
+      .domain([0, 5])
+      .range(['#eee', '#aaa']);
+
     const xbw = xScale.bandwidth();
     const ybw = yScale.bandwidth();
 
@@ -233,17 +227,27 @@ class TopicPolling {
     plot
       .appendSelect('g.axis.x')
       .attr('transform', 'translate(0,0)')
-      .call(d3.axisTop(xScale))
-      .selectAll('.tick text');
+      .call(d3.axisTop(xScale).tickFormat(d => {
+        const string = d;
+        const newString = props.demographicLookup[props.selectedDemo][string] ? props.demographicLookup[props.selectedDemo][string] : string;
+        return newString;
+      }))
+      .selectAll('.tick text')
+      .attr('class', function(d, i) {
+        const textClass = i === 0 ? 'val bold' : 'val';
+        return textClass;
+      });
 
     const tickValue = plotData.map(d => d.id);
 
-    console.log(tickValue);
-    console.log('DATA HERE', plotData);
+    // console.log(tickValue);
+    // console.log('DATA HERE', plotData);
     plot
       .appendSelect('g.axis.y')
       .call(d3.axisLeft(yScale).tickFormat(d => {
-        return tickValue[d];
+        const string = tickValue[d];
+        const newString = props.translation.en[string] ? props.translation.en[string] : string;
+        return newString;
       }))
       .selectAll('.tick text')
       .attr('x', -props.margin.left)
@@ -257,27 +261,6 @@ class TopicPolling {
       .join('g')
       .attr('class', 'term-group');
       // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
-
-    termGroup.selectAll('rect')
-      .data(d => d.values)
-      .join('rect')
-      .attr('class', 'squares')
-      .attr('x', d => xScale(d.id) - margin.left / this.demoList.length + 1)
-      .attr('y', d => yScale(d.term) - margin.top / 2)
-      .attr('width', xScale.bandwidth())
-      .attr('height', yScale.bandwidth())
-      .style('fill', d => valueScale(d.values))
-      // .style('fill', function(d) { console.log(d.val); })
-      .style('opacity', 0);
-
-    termGroup.selectAll('text.val')
-      .data(d => d.values)
-      .join('text')
-      .attr('class', 'val')
-      .attr('x', d => xScale(d.id) + (xScale.bandwidth() * 0.5))
-      .attr('y', d => yScale(d.rank) + (yScale.bandwidth() * 0.5) + 6)
-      .text(d => d3.format('.1f')(d.val))
-      .style('text-anchor', 'middle');
 
     termGroup.appendSelect('path')
       .attr('d', d => {
@@ -299,9 +282,22 @@ class TopicPolling {
         return makeLine(newArr);
       })
       .style('fill', d => {
-        return this.color(d.values[0].val);
+        if (d.values[0].val > 5.0) { return this.color(d.values[0].val); } else { return this.colorOther(d.values[0].val); };
       })
-      .style('opacity', 0.5);
+      .style('opacity', 0.60);
+
+    termGroup.selectAll('text.val')
+      .data(d => d.values)
+      .join('text')
+      .attr('class', function(d, i) {
+        const textClass = i === 0 ? 'val bold' : 'val';
+        return textClass;
+      })
+      .attr('x', d => xScale(d.id) + (xScale.bandwidth() * 0.5))
+      .attr('y', d => yScale(d.rank) + (yScale.bandwidth() * 0.5) + 6)
+      .text(d => d3.format('.1f')(d.val))
+      .style('text-anchor', 'middle')
+      .style('opacity', 0.80);
 
     const transition = plot.transition().duration(500);
 
