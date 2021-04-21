@@ -1,12 +1,12 @@
 {
-  "name": "@reuters-graphics/chart-module-topic-polling-chart",
+  "name": "@reuters-graphics/chart-module-topic-polling",
   "version": "0.0.1",
   "main": "dist/index.js",
   "module": "src/js/index.js",
   "license": "MIT",
   "private": false,
-  "repository": "github:reuters-graphics/chart-module-topic-polling-chart",
-  "homepage": "https://reuters-graphics.github.io/chart-module-topic-polling-chart/",
+  "repository": "github:reuters-graphics/chart-module-topic-polling",
+  "homepage": "https://reuters-graphics.github.io/chart-module-topic-polling/",
   "files": [
     "src/js/**/*",
     "src/scss/**/*",

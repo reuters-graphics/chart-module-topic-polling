@@ -39,7 +39,7 @@ To apply this chart's default styles when using SCSS, simply define the variable
 ```CSS
 $TopicPolling-container: '#chart';
 
-@import '~@reuters-graphics/chart-module-topic-polling-chart/src/scss/chart';
+@import '~@reuters-graphics/chart-module-topic-polling/src/scss/chart';
 ```
 
 ## Developing chart modules

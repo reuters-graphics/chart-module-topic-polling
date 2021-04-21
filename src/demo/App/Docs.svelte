@@ -43,10 +43,10 @@ for your chart. In which case, follow the notes below! -->
    */
 
   // Installation docs
-  const installDocs = `$ yarn add https://github.com/reuters-graphics/chart-module-topic-polling-chart.git`;
+  const installDocs = `$ yarn add https://github.com/reuters-graphics/chart-module-topic-polling.git`;
 
   // JavaScript docs
-  $: jsDocs = `import Chart from '@reuters-graphics/chart-module-topic-polling-chart';
+  $: jsDocs = `import Chart from '@reuters-graphics/chart-module-topic-polling';
 
 const chart = new Chart();
 
@@ -59,7 +59,7 @@ chart
   // SCSS docs
   const styleDocs = `$TopicPolling-container: '.topic-polling-chart-container';
 
-@import '~@reuters-graphics/chart-module-topic-polling-chart/src/scss/chart';`;
+@import '~@reuters-graphics/chart-module-topic-polling/src/scss/chart';`;
 
 </script>
 
@@ -78,7 +78,7 @@ chart
 
 <!-- 🔗 A link to your chart's GitHub repo -->
 <div class='repo-link'>
-  <a href="https://github.com/reuters-graphics/chart-module-topic-polling-chart" target="_blank">
+  <a href="https://github.com/reuters-graphics/chart-module-topic-polling" target="_blank">
     <Icon icon={faGithub} />
   </a>
 </div>
