@@ -13,7 +13,7 @@ $ yarn add https://github.com/reuters-graphics/chart-module-topic-polling-chart.
 ### Use
 
 ```javascript
-import TopicPolling from '@reuters-graphics/chart-module-topic-polling-chart';
+import TopicPolling from '@reuters-graphics/chart-module-topic-polling';
 
 const chart = new TopicPolling();
 
