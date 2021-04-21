@@ -51,16 +51,33 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     }
   }
   
-  
-  .term-path {
-    opacity: 1;
-    &.inactive{
-      opacity:.3
+  .term-group {
+
+    path {
+      opacity: .5;
     }
-    &.active {
+
+    &.active path {
       opacity: 1;
+      stroke: white;
+      stroke-width: 1;
     }
- 
+
+    &.inactive path {
+      //opacity: .1;
+    }
+
   }
+
+  // .term-path {
+  //   opacity: 1;
+  //   &.inactive{
+  //     opacity:.3
+  //   }
+  //   &.active {
+  //     opacity: 1;
+  //   }
+ 
+  // }
 
 }
