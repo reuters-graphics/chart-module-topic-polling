@@ -29,7 +29,7 @@ Follow the notes below! -->
     dates: testData.dates,
     selectedDate: defaultDateKey,
     selectedDemo: 'Party',
-    omit:["NoneDK","DK","Prefernottoanswer","Other","NoAnswer"],
+    omit:["NoneDK","DK","Prefernottoanswer","Other","NoAnswer","Independent"],
     demographicLookup:{
       Respondents:{},
       RegisterdVoter:{},
@@ -37,7 +37,6 @@ Follow the notes below! -->
       All: 'All',
       Republican: 'Rep.',
       Democrat: 'Dem.',
-      Independent: 'Ind.'
       },
       Age: {
       },
