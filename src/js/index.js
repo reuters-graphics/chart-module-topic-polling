@@ -57,20 +57,20 @@ class TopicPolling {
       if (key.split(':')[0] === props.selectedDemo) {
         const lookupObject = key.split(':')[0];
         const demo = key.split(':')[1];
-        console.log('demoList', data.demographics, 'key', key);
+        //console.log('demoList', data.demographics, 'key', key);
         if (props.omit.indexOf(demo) < 0) {
           this.demoList.push(demo);
         }
       }
     });
 
-    console.log('props:', props.translation.en);
+    //console.log('props:', props.translation.en);
 
     const theMap = {};
     const theData = [];
     // const termLookup = this.demoList;
     // const temp = [];
-    console.log(data.demographics);
+   // console.log(data.demographics);
 
     this.demoList.forEach((demo) => {
       if (demo === 'All') {
@@ -136,7 +136,7 @@ class TopicPolling {
 
     let high, low, mid;
     theData.forEach((data, i) => {
-      console.log('color dom data', data);
+      //console.log('color dom data', data);
       high = 0;
       if (theData[i].values[0].val > 5.0) {
         low = i;
@@ -145,7 +145,7 @@ class TopicPolling {
       mid = (high - low) / 2;
 
       this.colorDom = [low, high];
-      console.log('color dom data', this.colorDom);
+      //console.log('color dom data', this.colorDom);
     });
 
     return theData.sort((a, b) =>
@@ -163,9 +163,9 @@ class TopicPolling {
     aspectHeight: 0.7,
     margin: {
       top: 40,
-      right: 20,
+      right: 10,
       bottom: 25,
-      left: 70,
+      left: 100,
     },
     fill: 'grey',
   };
@@ -195,7 +195,10 @@ class TopicPolling {
       .scaleBand()
       .domain(this.demoList)
       .range([0, width])
-      .padding(0.4);
+      .padding(0.4)
+      .paddingOuter(0);
+
+    console.log(width);
 
     const yScale = d3.scaleBand().domain(yDom).range([0, height]).padding(0.1);
 
@@ -208,8 +211,6 @@ class TopicPolling {
 
     const xbw = xScale.bandwidth();
     const ybw = yScale.bandwidth();
-
-    console.log(xbw, ybw);
 
     const makeLine = d3
       .area()
@@ -264,8 +265,8 @@ class TopicPolling {
         })
       )
       .selectAll('.tick text')
-      .attr('x', props.margin.left / 1.5)
-      .style('text-anchor', 'end');
+      .attr('x', -props.margin.left)
+      .style('text-anchor', 'start');
 
     d3.select(container).selectAll('.tick').selectAll('line').remove();
 
