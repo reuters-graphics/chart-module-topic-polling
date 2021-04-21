@@ -24,11 +24,43 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     }
    
   }
+  .bold{
+    font-weight: 600 !important;
+  }
   .val{
-    font-weight: 400;
+    font-weight: 200;
     &.bold{
       font-weight: 600 !important;
     }
   }
+
+  .axis.y{
+    .tick{
+      text{
+        font-weight: 600 !important;
+        fill:black!important;
+      }
+    }
+  }
+  .axis.x{
+    .tick:first-of-type{
+      text{
+        font-weight: 600 !important;
+        fill:black!important;
+      }
+    }
+  }
   
+  
+  .term-path {
+    opacity: 1;
+    &.inactive{
+      opacity:.3
+    }
+    &.active {
+      opacity: 1;
+    }
+ 
+  }
+
 }
