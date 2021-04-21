@@ -64,7 +64,7 @@ class TopicPolling {
       }
     });
 
-    console.log('props', props.translation.en);
+    console.log('props:', props.translation.en);
 
     const theMap = {};
     const theData = [];
@@ -198,13 +198,22 @@ class TopicPolling {
       .padding(0.4);
 
     const yScale = d3.scaleBand().domain(yDom).range([0, height]).padding(0.1);
+<<<<<<< HEAD
+=======
+
+    const valueScale = d3.scaleLinear().domain([0, 20]).range(['red', 'red']);
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
 
     this.color = d3
       .scaleLinear()
       .domain(this.colorDom)
       .range(['#DDF0EE', '#60A6A4']);
 
+<<<<<<< HEAD
     this.colorOther = d3.scaleLinear().domain([0, 5]).range(['#eee', '#ccc']);
+=======
+    this.colorOther = d3.scaleLinear().domain([0, 5]).range(['#eee', '#aaa']);
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
 
     const xbw = xScale.bandwidth();
     const ybw = yScale.bandwidth();
@@ -213,6 +222,7 @@ class TopicPolling {
 
     const makeLine = d3
       .area()
+<<<<<<< HEAD
       .x((d, i) => {
         if (i == 0) {
           return -props.margin.left;
@@ -222,6 +232,16 @@ class TopicPolling {
       })
       .y0((d) => yScale(d.rank))
       .y1((d) => yScale(d.rank) + ybw);
+=======
+      .x((d) => {
+        return xScale(d.id) + xbw * d.dir + xbw * 0.5;
+      })
+      .y0((d) => yScale(d.rank))
+      .y1((d) => yScale(d.rank) + ybw);
+
+    // .attr('x', d => xScale(d.id) - margin.left / this.demoList.length + 1)
+    // .attr('y', d => yScale(d.term) - margin.top / 2)
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
 
     const plot = this.selection()
       .appendSelect('svg') // 👈 Use appendSelect instead of append for non-data-bound elements!
@@ -236,14 +256,20 @@ class TopicPolling {
       .call(
         d3.axisTop(xScale).tickFormat((d) => {
           const string = d;
+<<<<<<< HEAD
           const newString = props.demographicLookup[props.selectedDemo][string] ?
               props.demographicLookup[props.selectedDemo][string] :
             string;
+=======
+          const newString = props.demographicLookup[props.selectedDemo][string]
+            ? props.demographicLookup[props.selectedDemo][string]
+            : string;
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
           return newString;
         })
       )
       .selectAll('.tick text')
-      .attr('class', function(d, i) {
+      .attr('class', function (d, i) {
         const textClass = i === 0 ? 'val bold' : 'val';
         return textClass;
       });
@@ -257,9 +283,15 @@ class TopicPolling {
       .call(
         d3.axisLeft(yScale).tickFormat((d) => {
           const string = tickValue[d];
+<<<<<<< HEAD
           const newString = props.translation.en[string] ?
               props.translation.en[string] :
             string;
+=======
+          const newString = props.translation.en[string]
+            ? props.translation.en[string]
+            : string;
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
           return newString;
         })
       )
@@ -272,9 +304,11 @@ class TopicPolling {
       .selectAll('line')
       .remove();
 
-    const termGroup = plot.selectAll('g.term-group')
+    const termGroup = plot
+      .selectAll('g.term-group')
       .data(plotData)
       .join('g')
+<<<<<<< HEAD
       .attr('class', d => `term-path ${slugify(d.id)}`)
       .on('mouseover', function(e, d) {
         plot.selectAll('.term-path').classed('inactive', true);
@@ -284,13 +318,19 @@ class TopicPolling {
         plot.selectAll('.term-path').classed('inactive', false);
         plot.selectAll('.term-path').classed('active', false);
       });
+=======
+      .attr('class', 'term-group');
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
     // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
 
     termGroup
       .appendSelect('path')
       .attr('d', (d) => {
         const newArr = [];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
         d.values.forEach((v) => {
           [-0.5, 0.5].forEach((dir) => {
             const obj = {
@@ -307,6 +347,7 @@ class TopicPolling {
 
         return makeLine(newArr);
       })
+<<<<<<< HEAD
       .style('fill', (d, i) => {
         if (d.values[0].val > 5.0) {
           return this.color(i);
@@ -314,17 +355,28 @@ class TopicPolling {
           return this.colorOther(d.values[0].val);
         }
       });
+=======
+      .style('fill', (d) => {
+        if (d.values[0].val > 5.0) {
+          return this.color(d.values[0].val);
+        } else {
+          return this.colorOther(d.values[0].val);
+        }
+      })
+      .style('opacity', 0.6);
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
 
     termGroup
       .selectAll('text.val')
       .data((d) => d.values)
       .join('text')
-      .attr('class', function(d, i) {
+      .attr('class', function (d, i) {
         const textClass = i === 0 ? 'val bold' : 'val';
         return textClass;
       })
       .attr('x', (d) => xScale(d.id) + xScale.bandwidth() * 0.5)
       .attr('y', (d) => yScale(d.rank) + yScale.bandwidth() * 0.5 + 6)
+<<<<<<< HEAD
       .text((d) => {
         let str = d3.format('.0f')(d.val);
         if (d.val < 1) {
@@ -336,6 +388,11 @@ class TopicPolling {
       .style('text-anchor', 'middle');
 
     termGroup.lower();
+=======
+      .text((d) => d3.format('.1f')(d.val))
+      .style('text-anchor', 'middle')
+      .style('opacity', 0.8);
+>>>>>>> 16918eb6b66300ab1844f9aa65b365604b4fe7e8
 
     const transition = plot.transition().duration(500);
 

@@ -1,0 +1,34 @@
+@import '~@reuters-graphics/style-theme-eisbaer/scss/main';
+@import '~@reuters-graphics/style-color/scss/thematic/brand';
+
+$TopicPolling-container: '#topic-polling-chart-container' !default;
+
+#{$TopicPolling-container} {
+  /* Write your chart styles here */
+  .axis {
+    pointer-events: none;
+    text {
+      font-family: $font-family-sans-serif;
+      fill: $gray-400;
+      font-size: 0.875rem;
+    }
+
+    line,
+    path {
+      stroke: $gray-600;
+      stroke-width: 1px;
+    }
+
+    path.domain {
+      display: none;
+    }
+   
+  }
+  .val{
+    font-weight: 400;
+    &.bold{
+      font-weight: 600 !important;
+    }
+  }
+  
+}
