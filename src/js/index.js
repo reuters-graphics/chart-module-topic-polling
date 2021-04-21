@@ -70,7 +70,7 @@ class TopicPolling {
     const theData = [];
     // const termLookup = this.demoList;
     // const temp = [];
-   // console.log(data.demographics);
+    // console.log(data.demographics);
 
     this.demoList.forEach((demo) => {
       if (demo === 'All') {

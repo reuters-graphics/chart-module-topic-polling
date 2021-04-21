@@ -60,9 +60,9 @@ var TopicPolling = /*#__PURE__*/function () {
       aspectHeight: 0.7,
       margin: {
         top: 40,
-        right: 20,
+        right: 10,
         bottom: 25,
-        left: 70
+        left: 100
       },
       fill: 'grey'
     });
@@ -110,20 +110,19 @@ var TopicPolling = /*#__PURE__*/function () {
       Object.keys(data.demographics).forEach(function (key) {
         if (key.split(':')[0] === props.selectedDemo) {
           key.split(':')[0];
-          var demo = key.split(':')[1];
-          console.log('demoList', data.demographics, 'key', key);
+          var demo = key.split(':')[1]; //console.log('demoList', data.demographics, 'key', key);
 
           if (props.omit.indexOf(demo) < 0) {
             _this.demoList.push(demo);
           }
         }
-      });
-      console.log('props:', props.translation.en);
+      }); //console.log('props:', props.translation.en);
+
       var theMap = {};
       var theData = []; // const termLookup = this.demoList;
       // const temp = [];
+      // console.log(data.demographics);
 
-      console.log(data.demographics);
       this.demoList.forEach(function (demo) {
         if (demo === 'All') {
           return true;
@@ -179,14 +178,13 @@ var TopicPolling = /*#__PURE__*/function () {
       });
       var high, low;
       theData.forEach(function (data, i) {
-        console.log('color dom data', data);
+        //console.log('color dom data', data);
         high = 0;
 
         if (theData[i].values[0].val > 5.0) {
           low = i;
         } // low = theData[theData.length - 1].values[0].val;
-        _this.colorDom = [low, high];
-        console.log('color dom data', _this.colorDom);
+        _this.colorDom = [low, high]; //console.log('color dom data', this.colorDom);
       });
       return theData.sort(function (a, b) {
         return d3.descending(a.values[0].val, b.values[0].val);
@@ -225,13 +223,13 @@ var TopicPolling = /*#__PURE__*/function () {
       var width = containerWidth - margin.left - margin.right;
       var height = this.termList.length * 30 - margin.top - margin.bottom;
       var yDom = d3.range(0, this.termList.length);
-      var xScale = d3.scaleBand().domain(this.demoList).range([0, width]).padding(0.4);
+      var xScale = d3.scaleBand().domain(this.demoList).range([0, width]).padding(0.4).paddingOuter(0);
+      console.log(width);
       var yScale = d3.scaleBand().domain(yDom).range([0, height]).padding(0.1);
       this.color = d3.scaleLinear().domain(this.colorDom).range(['#DDF0EE', '#60A6A4']);
       this.colorOther = d3.scaleLinear().domain([0, 5]).range(['#eee', '#ccc']);
       var xbw = xScale.bandwidth();
       var ybw = yScale.bandwidth();
-      console.log(xbw, ybw);
       var makeLine = d3.area().x(function (d, i) {
         if (i == 0) {
           return -props.margin.left;
@@ -262,7 +260,7 @@ var TopicPolling = /*#__PURE__*/function () {
         var string = tickValue[d];
         var newString = props.translation.en[string] ? props.translation.en[string] : string;
         return newString;
-      })).selectAll('.tick text').attr('x', props.margin.left / 1.5).style('text-anchor', 'end');
+      })).selectAll('.tick text').attr('x', -props.margin.left).style('text-anchor', 'start');
       d3.select(container).selectAll('.tick').selectAll('line').remove();
       var termsLayer = plot.appendSelect('g.terms-layer').lower();
       var termGroup = termsLayer.selectAll('g.term-group').data(plotData).join('g').attr('class', function (d) {

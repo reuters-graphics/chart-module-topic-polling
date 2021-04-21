@@ -129,7 +129,7 @@
       "imports": []
     },
     "dist/demo/App/Docs.svelte.js": {
-      "bytes": 4339,
+      "bytes": 4315,
       "imports": [
         {
           "path": "dist/demo/App/Docs.svelte.css",
@@ -209,7 +209,7 @@
       ]
     },
     "dist/js/index.js": {
-      "bytes": 9750,
+      "bytes": 9779,
       "imports": [
         {
           "path": "_snowpack/pkg/d3.js",
@@ -358,7 +358,7 @@
           "bytesInOutput": 1372
         },
         "dist/demo/App/Docs.svelte.js": {
-          "bytesInOutput": 1615
+          "bytesInOutput": 1591
         },
         "dist/demo/App/Explorer.svelte.css": {
           "bytesInOutput": 0
@@ -379,7 +379,7 @@
           "bytesInOutput": 11840
         },
         "dist/js/index.js": {
-          "bytesInOutput": 4387
+          "bytesInOutput": 4211
         },
         "dist/js/testdata.json.proxy.js": {
           "bytesInOutput": 91397
@@ -394,7 +394,7 @@
           "bytesInOutput": 44
         }
       },
-      "bytes": 1371724
+      "bytes": 1371524
     },
     "../~~bundle~~/dist/demo/App/index.css": {
       "imports": [],
