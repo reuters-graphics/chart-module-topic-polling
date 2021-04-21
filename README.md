@@ -7,7 +7,7 @@ See the [demo page](https://reuters-graphics.github.io/chart-module-topic-pollin
 ### Install
 
 ```
-$ yarn add https://github.com/reuters-graphics/chart-module-topic-polling-chart.git
+$ yarn add https://github.com/reuters-graphics/chart-module-topic-polling.git
 ```
 
 ### Use
