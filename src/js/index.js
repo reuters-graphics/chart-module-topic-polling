@@ -269,20 +269,21 @@ class TopicPolling {
 
     d3.select(container).selectAll('.tick').selectAll('line').remove();
 
-    const termGroup = plot
+    const termsLayer = plot.appendSelect('g.terms-layer').lower();
+
+    const termGroup = termsLayer
       .selectAll('g.term-group')
       .data(plotData)
       .join('g')
       .attr('class', (d) => `term-group ${slugify(d.id)}`)
       .on('mouseover', function (e, d) {
         plot.selectAll('.term-group').classed('inactive', true);
-        d3.select(this).classed('active', true);
+        d3.select(this).classed('active', true).classed('inactive', false).raise();
       })
       .on('mouseout', () => {
         plot.selectAll('.term-group').classed('inactive', false);
         plot.selectAll('.term-group').classed('active', false);
       });
-    // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
 
     termGroup
       .appendSelect('path')

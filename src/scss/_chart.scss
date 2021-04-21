@@ -61,6 +61,10 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
   .term-group {
     opacity: 1;
 
+    path {
+      opacity: .7;
+    }
+
     &.active path {
       opacity: 1;
       stroke: white;
