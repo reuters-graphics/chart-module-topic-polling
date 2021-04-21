@@ -23,14 +23,13 @@
     "lint": "yarn lint:js && yarn lint:scss && yarn lint:svelte"
   },
   "dependencies": {
-    "@reuters-graphics/chart-module-topic-polling": "https://github.com/reuters-graphics/chart-module-topic-polling.git",
     "d3": "^6.2.0",
     "d3-appendselect": "^0.1.0",
     "d3-array": "^2.10.0",
     "d3-axis": "^2.0.0",
     "d3-scale": "^3.2.3",
     "d3-selection": "^2.0.0",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

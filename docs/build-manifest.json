@@ -1,11 +1,11 @@
 {
   "inputs": {
     "dist/scss/demo.css": {
-      "bytes": 309738,
+      "bytes": 309927,
       "imports": []
     },
     "dist/demo/App/App.svelte.css": {
-      "bytes": 43,
+      "bytes": 42,
       "imports": []
     },
     "_snowpack/pkg/common/index-8832e1ef.js": {
@@ -259,7 +259,7 @@
       ]
     },
     "dist/demo/App/App.svelte.js": {
-      "bytes": 2955,
+      "bytes": 2954,
       "imports": [
         {
           "path": "dist/demo/App/App.svelte.css",
@@ -298,10 +298,10 @@
       "imports": [],
       "inputs": {
         "dist/scss/demo.css": {
-          "bytesInOutput": 251638
+          "bytesInOutput": 251811
         }
       },
-      "bytes": 251656
+      "bytes": 251829
     },
     "../~~bundle~~/dist/demo/App/index.js": {
       "imports": [],
@@ -388,19 +388,19 @@
           "bytesInOutput": 4039
         },
         "dist/demo/App/App.svelte.js": {
-          "bytesInOutput": 894
+          "bytesInOutput": 893
         },
         "dist/demo/App/index.js": {
           "bytesInOutput": 44
         }
       },
-      "bytes": 1371524
+      "bytes": 1371523
     },
     "../~~bundle~~/dist/demo/App/index.css": {
       "imports": [],
       "inputs": {
         "dist/demo/App/App.svelte.css": {
-          "bytesInOutput": 43
+          "bytesInOutput": 42
         },
         "dist/demo/App/ChartContainer.svelte.css": {
           "bytesInOutput": 767
@@ -415,7 +415,7 @@
           "bytesInOutput": 226
         }
       },
-      "bytes": 1555
+      "bytes": 1554
     }
   }
 }
