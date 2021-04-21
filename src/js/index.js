@@ -273,14 +273,14 @@ class TopicPolling {
       .selectAll('g.term-group')
       .data(plotData)
       .join('g')
-      .attr('class', (d) => `term-path ${slugify(d.id)}`)
+      .attr('class', (d) => `term-group ${slugify(d.id)}`)
       .on('mouseover', function (e, d) {
-        plot.selectAll('.term-path').classed('inactive', true);
+        plot.selectAll('.term-group').classed('inactive', true);
         d3.select(this).classed('active', true);
       })
       .on('mouseout', () => {
-        plot.selectAll('.term-path').classed('inactive', false);
-        plot.selectAll('.term-path').classed('active', false);
+        plot.selectAll('.term-group').classed('inactive', false);
+        plot.selectAll('.term-group').classed('active', false);
       });
     // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
 
