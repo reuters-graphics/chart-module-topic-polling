@@ -4,9 +4,11 @@
 $TopicPolling-container: '#topic-polling-chart-container' !default;
 
 #{$TopicPolling-container} {
+
   /* Write your chart styles here */
   .axis {
     pointer-events: none;
+
     text {
       font-family: $font-family-sans-serif;
       fill: $gray-400;
@@ -22,45 +24,68 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     path.domain {
       display: none;
     }
-   
+
   }
-  .bold{
+
+  .bold {
     font-weight: 600 !important;
   }
-  .val{
+
+  .val {
     font-weight: 200;
-    &.bold{
+
+    &.bold {
       font-weight: 600 !important;
     }
   }
 
-  .axis.y{
-    .tick{
-      text{
+  .axis.y {
+    .tick {
+      text {
         font-weight: 600 !important;
-        fill:black!important;
+        fill: black !important;
       }
     }
   }
-  .axis.x{
-    .tick:first-of-type{
-      text{
+
+  .axis.x {
+    .tick:first-of-type {
+      text {
         font-weight: 600 !important;
-        fill:black!important;
+        fill: black !important;
       }
     }
   }
-  
-  
-  .term-path {
+
+
+  .term-group {
     opacity: 1;
-    &.inactive{
-      opacity:.3
+
+    path {
+      opacity: .7;
     }
-    &.active {
+
+    &.active path {
       opacity: 1;
+      stroke: white;
+      stroke-width: 1;
     }
- 
+
+    &.inactive path {
+      //opacity: .1;
+    }
+
   }
+
+  // .term-path { 
+  //   opacity: 1;
+  //   &.inactive{
+  //     opacity:.3
+  //   }
+  //   &.active {
+  //     opacity: 1;
+  //   }
+
+  // }
 
 }

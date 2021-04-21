@@ -264,16 +264,16 @@ var TopicPolling = /*#__PURE__*/function () {
         return newString;
       })).selectAll('.tick text').attr('x', props.margin.left / 1.5).style('text-anchor', 'end');
       d3.select(container).selectAll('.tick').selectAll('line').remove();
-      var termGroup = plot.selectAll('g.term-group').data(plotData).join('g').attr('class', function (d) {
-        return "term-path ".concat(slugify(d.id));
+      var termsLayer = plot.appendSelect('g.terms-layer').lower();
+      var termGroup = termsLayer.selectAll('g.term-group').data(plotData).join('g').attr('class', function (d) {
+        return "term-group ".concat(slugify(d.id));
       }).on('mouseover', function (e, d) {
-        plot.selectAll('.term-path').classed('inactive', true);
-        d3.select(this).classed('active', true);
+        plot.selectAll('.term-group').classed('inactive', true);
+        d3.select(this).classed('active', true).classed('inactive', false).raise();
       }).on('mouseout', function () {
-        plot.selectAll('.term-path').classed('inactive', false);
-        plot.selectAll('.term-path').classed('active', false);
-      }); // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
-
+        plot.selectAll('.term-group').classed('inactive', false);
+        plot.selectAll('.term-group').classed('active', false);
+      });
       termGroup.appendSelect('path').attr('d', function (d) {
         var newArr = [];
         d.values.forEach(function (v) {

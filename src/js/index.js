@@ -278,7 +278,10 @@ class TopicPolling {
       .attr('class', (d) => `term-group ${slugify(d.id)}`)
       .on('mouseover', function (e, d) {
         plot.selectAll('.term-group').classed('inactive', true);
-        d3.select(this).classed('active', true).classed('inactive', false).raise();
+        d3.select(this)
+          .classed('active', true)
+          .classed('inactive', false)
+          .raise();
       })
       .on('mouseout', () => {
         plot.selectAll('.term-group').classed('inactive', false);
