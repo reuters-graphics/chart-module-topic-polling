@@ -59,6 +59,11 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
 
 
   .term-group {
+
+    text {
+      font-family: $font-family-sans-serif;
+    }
+
     opacity: 1;
 
     path {
@@ -87,5 +92,6 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
   //   }
 
   // }
+
 
 }

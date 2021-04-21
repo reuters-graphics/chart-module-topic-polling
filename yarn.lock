@@ -858,6 +858,18 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.34"
 
+"@reuters-graphics/chart-module-topic-polling@https://github.com/reuters-graphics/chart-module-topic-polling.git":
+  version "0.0.1"
+  resolved "https://github.com/reuters-graphics/chart-module-topic-polling.git#ba1bb9561633b94bfd05a15e26fa521d1d0962fc"
+  dependencies:
+    d3 "^6.2.0"
+    d3-appendselect "^0.1.0"
+    d3-array "^2.10.0"
+    d3-axis "^2.0.0"
+    d3-scale "^3.2.3"
+    d3-selection "^2.0.0"
+    lodash "^4.17.20"
+
 "@reuters-graphics/eslint-config@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@reuters-graphics/eslint-config/-/eslint-config-0.0.2.tgz#0d5b870decc75aa4fc5f5bbd58e0de67daa6ca32"
