@@ -2,7 +2,7 @@
 
 # TopicPolling
 
-See the [demo page](https://reuters-graphics.github.io/chart-module-topic-polling-chart/).
+See the [demo page](https://reuters-graphics.github.io/chart-module-topic-polling/).
 
 ### Install
 

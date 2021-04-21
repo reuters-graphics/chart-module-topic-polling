@@ -177,16 +177,16 @@ var TopicPolling = /*#__PURE__*/function () {
 
         theData.push(obj);
       });
-      var high, low, mid;
+      var high, low;
       theData.forEach(function (data, i) {
-        console.log('color dom data', theData[i].values[0].val);
-        high = theData[0].values[0].val; // if (theData[i].values[0].val > 5.0) {
-        //   low = theData[i].values[0].val;
-        // }
+        console.log('color dom data', data);
+        high = 0;
 
-        low = theData[theData.length - 1].values[0].val;
-        mid = (high - low) / 2;
-        _this.colorDom = [low, mid, high];
+        if (theData[i].values[0].val > 5.0) {
+          low = i;
+        } // low = theData[theData.length - 1].values[0].val;
+        _this.colorDom = [low, high];
+        console.log('color dom data', _this.colorDom);
       });
       return theData.sort(function (a, b) {
         return d3.descending(a.values[0].val, b.values[0].val);
@@ -227,21 +227,22 @@ var TopicPolling = /*#__PURE__*/function () {
       var yDom = d3.range(0, this.termList.length);
       var xScale = d3.scaleBand().domain(this.demoList).range([0, width]).padding(0.4);
       var yScale = d3.scaleBand().domain(yDom).range([0, height]).padding(0.1);
-      d3.scaleLinear().domain([0, 20]).range(['red', 'red']);
-      this.color = d3.scaleLinear().domain(this.colorDom).range(['lightyellow', '#fd7e14', '#dc3545']);
-      this.colorOther = d3.scaleLinear().domain([0, 5]).range(['#eee', '#aaa']);
+      this.color = d3.scaleLinear().domain(this.colorDom).range(['#DDF0EE', '#60A6A4']);
+      this.colorOther = d3.scaleLinear().domain([0, 5]).range(['#eee', '#ccc']);
       var xbw = xScale.bandwidth();
       var ybw = yScale.bandwidth();
       console.log(xbw, ybw);
-      var makeLine = d3.area().x(function (d) {
-        return xScale(d.id) + xbw * d.dir + xbw * 0.5;
+      var makeLine = d3.area().x(function (d, i) {
+        if (i == 0) {
+          return -props.margin.left;
+        } else {
+          return xScale(d.id) + xbw * d.dir + xbw * 0.5;
+        }
       }).y0(function (d) {
         return yScale(d.rank);
       }).y1(function (d) {
         return yScale(d.rank) + ybw;
-      }); // .attr('x', d => xScale(d.id) - margin.left / this.demoList.length + 1)
-      // .attr('y', d => yScale(d.term) - margin.top / 2)
-
+      });
       var plot = this.selection().appendSelect('svg') // 👈 Use appendSelect instead of append for non-data-bound elements!
       .attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).appendSelect('g.plot').attr('transform', "translate(".concat(margin.left, ",").concat(margin.top, ")"));
       plot.appendSelect('g.axis.x').attr('transform', 'translate(0,0)').call(d3.axisTop(xScale).tickFormat(function (d) {
@@ -261,10 +262,17 @@ var TopicPolling = /*#__PURE__*/function () {
         var string = tickValue[d];
         var newString = props.translation.en[string] ? props.translation.en[string] : string;
         return newString;
-      })).selectAll('.tick text').attr('x', -props.margin.left).style('text-anchor', 'start'); // console.log(plotData);
-
+      })).selectAll('.tick text').attr('x', props.margin.left / 1.5).style('text-anchor', 'end');
       d3.select(container).selectAll('.tick').selectAll('line').remove();
-      var termGroup = plot.selectAll('g.term-group').data(plotData).join('g').attr('class', 'term-group'); // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
+      var termGroup = plot.selectAll('g.term-group').data(plotData).join('g').attr('class', function (d) {
+        return "term-path ".concat(slugify(d.id));
+      }).on('mouseover', function (e, d) {
+        plot.selectAll('.term-path').classed('inactive', true);
+        d3.select(this).classed('active', true);
+      }).on('mouseout', function () {
+        plot.selectAll('.term-path').classed('inactive', false);
+        plot.selectAll('.term-path').classed('active', false);
+      }); // .attr('transform', `translate(${margin.left / this.demoList.length},${margin.top / 2})`);
 
       termGroup.appendSelect('path').attr('d', function (d) {
         var newArr = [];
@@ -281,13 +289,13 @@ var TopicPolling = /*#__PURE__*/function () {
           });
         });
         return makeLine(newArr);
-      }).style('fill', function (d) {
+      }).style('fill', function (d, i) {
         if (d.values[0].val > 5.0) {
-          return _this2.color(d.values[0].val);
+          return _this2.color(i);
         } else {
           return _this2.colorOther(d.values[0].val);
         }
-      }).style('opacity', 0.6);
+      });
       termGroup.selectAll('text.val').data(function (d) {
         return d.values;
       }).join('text').attr('class', function (d, i) {
@@ -298,8 +306,15 @@ var TopicPolling = /*#__PURE__*/function () {
       }).attr('y', function (d) {
         return yScale(d.rank) + yScale.bandwidth() * 0.5 + 6;
       }).text(function (d) {
-        return d3.format('.1f')(d.val);
-      }).style('text-anchor', 'middle').style('opacity', 0.8);
+        var str = d3.format('.0f')(d.val);
+
+        if (d.val < 1) {
+          str = '<1';
+        }
+
+        return d.id == 'All' ? "".concat(str, "%") : str;
+      }).style('text-anchor', 'middle');
+      termGroup.lower();
       plot.transition().duration(500);
       return this; // Generally, always return the chart class from draw!
     }
@@ -307,5 +322,13 @@ var TopicPolling = /*#__PURE__*/function () {
 
   return TopicPolling;
 }();
+
+function slugify(text) {
+  return text.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
+  .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+  .replace(/\-\-+/g, '-') // Replace multiple - with single -
+  .replace(/^-+/, '') // Trim - from start of text
+  .replace(/-+$/, ''); // Trim - from end of text
+}
 
 module.exports = TopicPolling;
