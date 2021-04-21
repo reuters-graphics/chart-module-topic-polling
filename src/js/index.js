@@ -236,14 +236,14 @@ class TopicPolling {
       .call(
         d3.axisTop(xScale).tickFormat((d) => {
           const string = d;
-          const newString = props.demographicLookup[props.selectedDemo][string]
-            ? props.demographicLookup[props.selectedDemo][string]
-            : string;
+          const newString = props.demographicLookup[props.selectedDemo][string] ?
+              props.demographicLookup[props.selectedDemo][string] :
+            string;
           return newString;
         })
       )
       .selectAll('.tick text')
-      .attr('class', function (d, i) {
+      .attr('class', function(d, i) {
         const textClass = i === 0 ? 'val bold' : 'val';
         return textClass;
       });
@@ -257,9 +257,9 @@ class TopicPolling {
       .call(
         d3.axisLeft(yScale).tickFormat((d) => {
           const string = tickValue[d];
-          const newString = props.translation.en[string]
-            ? props.translation.en[string]
-            : string;
+          const newString = props.translation.en[string] ?
+              props.translation.en[string] :
+            string;
           return newString;
         })
       )
@@ -274,7 +274,7 @@ class TopicPolling {
       .data(plotData)
       .join('g')
       .attr('class', (d) => `term-group ${slugify(d.id)}`)
-      .on('mouseover', function (e, d) {
+      .on('mouseover', function(e, d) {
         plot.selectAll('.term-group').classed('inactive', true);
         d3.select(this).classed('active', true);
       })
@@ -316,7 +316,7 @@ class TopicPolling {
       .selectAll('text.val')
       .data((d) => d.values)
       .join('text')
-      .attr('class', function (d, i) {
+      .attr('class', function(d, i) {
         const textClass = i === 0 ? 'val bold' : 'val';
         return textClass;
       })
