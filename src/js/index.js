@@ -57,14 +57,14 @@ class TopicPolling {
       if (key.split(':')[0] === props.selectedDemo) {
         const lookupObject = key.split(':')[0];
         const demo = key.split(':')[1];
-        //console.log('demoList', data.demographics, 'key', key);
+        // console.log('demoList', data.demographics, 'key', key);
         if (props.omit.indexOf(demo) < 0) {
           this.demoList.push(demo);
         }
       }
     });
 
-    //console.log('props:', props.translation.en);
+    // console.log('props:', props.translation.en);
 
     const theMap = {};
     const theData = [];
@@ -136,7 +136,7 @@ class TopicPolling {
 
     let high, low, mid;
     theData.forEach((data, i) => {
-      //console.log('color dom data', data);
+      // console.log('color dom data', data);
       high = 0;
       if (theData[i].values[0].val > 5.0) {
         low = i;
@@ -145,7 +145,7 @@ class TopicPolling {
       mid = (high - low) / 2;
 
       this.colorDom = [low, high];
-      //console.log('color dom data', this.colorDom);
+      // console.log('color dom data', this.colorDom);
     });
 
     return theData.sort((a, b) =>
@@ -187,7 +187,7 @@ class TopicPolling {
     const plotData = this.formatData(data, props);
 
     const width = containerWidth - margin.left - margin.right;
-    const height = this.termList.length * 30 - margin.top - margin.bottom;
+    const height = this.termList.length * 35 - margin.top - margin.bottom;
 
     const yDom = d3.range(0, this.termList.length);
 
@@ -202,6 +202,8 @@ class TopicPolling {
 
     const yScale = d3.scaleBand().domain(yDom).range([0, height]).padding(0.1);
 
+    const mouseOverScale = d3.scaleBand().domain(yDom).range([0, height]);
+
     this.color = d3
       .scaleLinear()
       .domain(this.colorDom)
@@ -211,6 +213,8 @@ class TopicPolling {
 
     const xbw = xScale.bandwidth();
     const ybw = yScale.bandwidth();
+    // const ybwmo = mouseOverScale.bandwidth();
+    const ybwmo = yScale.padding(0).bandwidth();
 
     const makeLine = d3
       .area()
@@ -223,6 +227,18 @@ class TopicPolling {
       })
       .y0((d) => yScale(d.rank))
       .y1((d) => yScale(d.rank) + ybw);
+
+    const makeLineMouseOver = d3
+      .area()
+      .x((d, i) => {
+        if (i == 0) {
+          return -props.margin.left;
+        } else {
+          return xScale(d.id) + xbw * d.dir + xbw * 0.5;
+        }
+      })
+      .y0((d) => mouseOverScale(d.rank))
+      .y1((d) => mouseOverScale(d.rank) + ybwmo);
 
     const plot = this.selection()
       .appendSelect('svg') // 👈 Use appendSelect instead of append for non-data-bound elements!
@@ -237,14 +253,14 @@ class TopicPolling {
       .call(
         d3.axisTop(xScale).tickFormat((d) => {
           const string = d;
-          const newString = props.demographicLookup[props.selectedDemo][string]
-            ? props.demographicLookup[props.selectedDemo][string]
-            : string;
+          const newString = props.demographicLookup[props.selectedDemo][string] ?
+              props.demographicLookup[props.selectedDemo][string] :
+            string;
           return newString;
         })
       )
       .selectAll('.tick text')
-      .attr('class', function (d, i) {
+      .attr('class', function(d, i) {
         const textClass = i === 0 ? 'val bold' : 'val';
         return textClass;
       });
@@ -258,14 +274,15 @@ class TopicPolling {
       .call(
         d3.axisLeft(yScale).tickFormat((d) => {
           const string = tickValue[d];
-          const newString = props.translation.en[string]
-            ? props.translation.en[string]
-            : string;
+          const newString = props.translation.en[string] ?
+              props.translation.en[string] :
+            string;
           return newString;
         })
       )
       .selectAll('.tick text')
-      .attr('x', -props.margin.left)
+      .attr('x', -props.margin.left + 4)
+      .attr('dy', 3)
       .style('text-anchor', 'start');
 
     d3.select(container).selectAll('.tick').selectAll('line').remove();
@@ -276,10 +293,27 @@ class TopicPolling {
       .selectAll('g.term-group')
       .data(plotData)
       .join('g')
-      .attr('class', (d) => `term-group ${slugify(d.id)}`)
-      .on('mouseover', function (e, d) {
+      .attr('class', (d) => `term-group ${slugify(d.id)}`);
+      // .on('mouseover', function(e, d) {
+      //   plot.selectAll('.term-group').classed('inactive', true);
+      //   d3.select(this)
+      //     .classed('active', true)
+      //     .classed('inactive', false)
+      //     .raise();
+      // })
+      // .on('mouseout', () => {
+      //   plot.selectAll('.term-group').classed('inactive', false);
+      //   plot.selectAll('.term-group').classed('active', false);
+      // });
+
+    const termGroupMouseOver = termsLayer
+      .selectAll('g.term-group-mouseover')
+      .data(plotData)
+      .join('g')
+      .attr('class', (d) => 'term-group-mouseover')
+      .on('mouseover', function(e, d) {
         plot.selectAll('.term-group').classed('inactive', true);
-        d3.select(this)
+        d3.select(`.term-group.${slugify(d.id)}`)
           .classed('active', true)
           .classed('inactive', false)
           .raise();
@@ -317,16 +351,39 @@ class TopicPolling {
         }
       });
 
+    termGroupMouseOver
+      .appendSelect('path')
+      .attr('d', (d) => {
+        const newArr = [];
+        d.values.forEach((v) => {
+          [-0.5, 0.5].forEach((dir) => {
+            const obj = {
+              rank: v.rank,
+              term: v.term,
+              val: v.val,
+              id: v.id,
+              dir: dir,
+            };
+
+            newArr.push(obj);
+          });
+        });
+
+        return makeLineMouseOver(newArr);
+      })
+      // .style('fill', 'red')
+      .style('opacity', 0);
+
     termGroup
       .selectAll('text.val')
       .data((d) => d.values)
       .join('text')
-      .attr('class', function (d, i) {
+      .attr('class', function(d, i) {
         const textClass = i === 0 ? 'val bold' : 'val';
         return textClass;
       })
       .attr('x', (d) => xScale(d.id) + xScale.bandwidth() * 0.5)
-      .attr('y', (d) => yScale(d.rank) + yScale.bandwidth() * 0.5 + 6)
+      .attr('y', (d) => yScale(d.rank) + yScale.bandwidth() * 0.5 + 4)
       .text((d) => {
         let str = d3.format('.0f')(d.val);
         if (d.val < 1) {

@@ -59,7 +59,7 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
 
 
   .term-group {
-
+    pointer-events:none;
     text {
       font-family: $font-family-sans-serif;
     }
@@ -77,7 +77,7 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     }
 
     &.inactive path {
-      //opacity: .1;
+      opacity: .2;
     }
 
   }

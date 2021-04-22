@@ -35,8 +35,8 @@ Follow the notes below! -->
       RegisterdVoter:{},
       Party:{
       All: 'All',
-      Republican: 'Rep.',
-      Democrat: 'Dem.',
+      Republican: 'Republican',
+      Democrat: 'Democrat',
       },
       Age: {
       },
