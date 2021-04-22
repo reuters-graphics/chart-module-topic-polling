@@ -6,22 +6,22 @@ Follow the notes below! -->
   import Docs from './App/Docs.svelte';
   import Explorer from './App/Explorer.svelte';
   import TopicPolling from '../js/index';
-  import testData from '../js/testdata.json'
+  import testData from '../js/testdata.json';
 
   let chart = new TopicPolling();
   let chartContainer;
 
   // 🎚️ Create variables for any data or props you want users to be able
   // to update in the demo. (And write buttons to update them below!)
-  let defaultDemoKey = 'Respondents:AllRespondents'
-  let defaultDateKey = '2021-03-17 - 2021-03-18'
+  let defaultDemoKey = 'Respondents:AllRespondents';
+  let defaultDateKey = '2021-03-17 - 2021-03-18';
   let dropDownDemoArray = setDropdownDemoData();
   let dropDownDateArray = testData.dates;
 
-  let chartData = testData.demographics[defaultDemoKey]; 
-  let chartData2 = testData.dates[defaultDateKey]; 
+  let chartData = testData.demographics[defaultDemoKey];
+  let chartData2 = testData.dates[defaultDateKey];
   // let categoryData = testData
- 
+
   let circleFill = 'steelblue';
   // ...
 
@@ -40,38 +40,35 @@ Follow the notes below! -->
       },
       Age: {
       },
-      Gender:{},
-      Residence:{},
-      Education:{},
-      Race:{
-
-      },
-      Income:{},
-      MaritalStatus:{},
-      Employment:{},
-      HomeOwnership:{}
+      Age: {},
+      Gender: {},
+      Residence: {},
+      Education: {},
+      Race: {},
+      Income: {},
+      MaritalStatus: {},
+      Employment: {},
+      HomeOwnership: {},
     },
-    translation:{
-      en:{
-      'Economy, unemployment, and jobs': 'Economy',
-      'Public health, disease, and illness': 'Public health',
-      'Health care system': 'Health care',
-      Immigration: 'Immigration',
-      'Crime or corruption': 'Crime',
-      'Inequality and discrimination': 'Inequality',
-      Morality: 'Morality',
-      Education: 'Education',
-      'Environment and climate': 'Environment',
-      'Terrorism and extremism': 'Terrorism',
-      'War and foreign conflicts': 'War/conflict',
-      'Energy issues': 'Energy issues',
-      }
-    }
+    translation: {
+      en: {
+        'Economy, unemployment, and jobs': 'Economy',
+        'Public health, disease, and illness': 'Public health',
+        'Health care system': 'Health care',
+        Immigration: 'Immigration',
+        'Crime or corruption': 'Crime',
+        'Inequality and discrimination': 'Inequality',
+        Morality: 'Morality',
+        Education: 'Education',
+        'Environment and climate': 'Environment',
+        'Terrorism and extremism': 'Terrorism',
+        'War and foreign conflicts': 'War/conflict',
+        'Energy issues': 'Energy issues',
+      },
+    },
   };
 
-
-console.log("dropDownDemoArray",dropDownDemoArray)
-
+  console.log('dropDownDemoArray', dropDownDemoArray);
 
   afterUpdate(() => {
     // 💪 Create a new chart instance of your module.
@@ -85,22 +82,19 @@ console.log("dropDownDemoArray",dropDownDemoArray)
   });
 
   function setDropdownDemoData() {
-    
     let demographics = {};
 
-    Object.keys(testData.demographics).forEach(d=> {
-      let parent = d.split(":")[0];
-      let child = d.split(":")[1];
+    Object.keys(testData.demographics).forEach((d) => {
+      let parent = d.split(':')[0];
+      let child = d.split(':')[1];
 
-      demographics[parent] = demographics[parent] ? demographics[parent] : {id: parent, values: []};
+      demographics[parent] = demographics[parent]
+        ? demographics[parent]
+        : { id: parent, values: [] };
       demographics[parent].values.push(child);
-
     });
     return Object.values(demographics);
-
   }
-  
-
 
   function getDemoVal() {
     //chartProps.selected = document.getElementById("dropdownDemo").value;
@@ -108,12 +102,9 @@ console.log("dropDownDemoArray",dropDownDemoArray)
   }
 
   function getDateVal() {
-    chartProps.selected = document.getElementById("dropdownDate").value;
+    chartProps.selected = document.getElementById('dropdownDate').value;
     chartData = testData.dates[chartProps.selected];
   }
-
-
-
 
   // Creates array of random variables for 3 circles.
   function getRandomData() {
@@ -130,21 +121,16 @@ console.log("dropDownDemoArray",dropDownDemoArray)
   }
 </script>
 
-<!-- 🖌️ Style your demo page here -->
-<style lang="scss">
-  .chart-options {
-    button {
-      padding: 5px 15px;
-    }
-  }
-</style>
-
 <div id="topic-polling-chart-container" bind:this={chartContainer} />
 
 <div class="chart-options">
   <!-- svelte-ignore a11y-no-onchange -->
-  <select bind:value={chartProps.selectedDemo} name="dropdownDemo" id="dropdownDemo" on:change={()=> getDemoVal()}>
-    
+  <select
+    bind:value={chartProps.selectedDemo}
+    name="dropdownDemo"
+    id="dropdownDemo"
+    on:change={() => getDemoVal()}
+  >
     <!-- {#each dropDownDemoArray as demo}
       <optgroup label="{demo.id}">
         {#each demo.values as demoVal}
@@ -154,23 +140,33 @@ console.log("dropDownDemoArray",dropDownDemoArray)
     {/each} -->
 
     {#each dropDownDemoArray as demo}
-        <option value="{demo.id}">{demo.id}</option>
+      <option value={demo.id}>{demo.id}</option>
     {/each}
-
   </select>
 
   <!-- svelte-ignore a11y-no-onchange -->
-  <select bind:value={chartProps.selectedDate} name="dropdownDate" id="dropdownDate" on:change={()=> getDateVal()}>
-    
+  <select
+    bind:value={chartProps.selectedDate}
+    name="dropdownDate"
+    id="dropdownDate"
+    on:change={() => getDateVal()}
+  >
     {#each dropDownDateArray as demo}
-      <option value="{demo}">{demo}</option>
+      <option value={demo}>{demo}</option>
     {/each}
-
   </select>
-  
 </div>
 
 <!-- ⚙️ These components will automatically create interactive documentation for you chart! -->
 <Docs />
-<Explorer title='Data' data={chart.data()} />
-<Explorer title='Props' data={chart.props()} />
+<Explorer title="Data" data={chart.data()} />
+<Explorer title="Props" data={chart.props()} />
+
+<!-- 🖌️ Style your demo page here -->
+<style lang="scss">
+  .chart-options {
+    button {
+      padding: 5px 15px;
+    }
+  }
+</style>

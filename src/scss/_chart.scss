@@ -4,7 +4,6 @@
 $TopicPolling-container: '#topic-polling-chart-container' !default;
 
 #{$TopicPolling-container} {
-
   /* Write your chart styles here */
   .axis {
     pointer-events: none;
@@ -24,7 +23,6 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     path.domain {
       display: none;
     }
-
   }
 
   .bold {
@@ -57,7 +55,6 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     }
   }
 
-
   .term-group {
     pointer-events:none;
     text {
@@ -67,7 +64,7 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     opacity: 1;
 
     path {
-      opacity: .7;
+      opacity: 0.7;
     }
 
     &.active path {
@@ -79,10 +76,9 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
     &.inactive path {
       opacity: .2;
     }
-
   }
 
-  // .term-path { 
+  // .term-path {
   //   opacity: 1;
   //   &.inactive{
   //     opacity:.3
@@ -92,6 +88,4 @@ $TopicPolling-container: '#topic-polling-chart-container' !default;
   //   }
 
   // }
-
-
 }
